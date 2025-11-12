@@ -1,0 +1,27 @@
+from collections import defaultdict, deque
+
+def canfinish(numcourses, prequisities):
+    graph = defaultdict(list)
+    indegree = [0]* numcourses
+
+    for course, pre in prequisities:
+        graph[pre].append(course)
+        indegree[course] += 1
+    
+    queue = deque()
+    for i in range(numcourses):
+        if indegree[i] == 0:
+            queue.append(i)
+    finished = 0
+
+    while queue:
+        current = queue.popleft()
+        
+        finished += 1
+        for next_course in graph[current]:
+            indegree[next_course] -= 1
+            if indegree [next_course] == 0:
+                queue.append(next_course)
+    return finished == numcourses
+print(canfinish(2, [[1, 0]]))
+print(canfinish(2, [[1,0],[0,1]]))
